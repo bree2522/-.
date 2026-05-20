@@ -10,361 +10,198 @@
         margin: 0;
         padding: 0;
         box-sizing: border-box;
-        font-family: "Pretendard", sans-serif;
+        font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
     }
 
     body {
-        background: linear-gradient(to bottom, #87ceeb, #ffffff);
+        background: linear-gradient(135deg, #e0f2fe 0%, #ffe4e6 100%);
         min-height: 100vh;
         display: flex;
         justify-content: center;
         align-items: center;
         padding: 20px;
+        overflow-x: hidden;
     }
 
+    /* 1. 시작 화면 스타일 */
+    #start-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #000;
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: opacity 0.5s ease;
+    }
+
+    /* 깃허브에 올리신 시작화면 이미지가 배경으로 지정됩니다 */
+    .title-bg {
+        width: 100%;
+        max-width: 500px;
+        height: 100%;
+        background: url('제목을 입력해주세요..jpg') no-repeat center center;
+        background-size: cover;
+        position: relative;
+    }
+
+    /* 이미지 속 START 버튼 위치에 맞춘 실제 클릭 영역 */
+    .invisible-start-btn {
+        position: absolute;
+        bottom: 12%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 60%;
+        height: 8%;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        outline: none;
+    }
+
+    /* 2. 본 게임 컨테이너 */
     .game-container {
         width: 100%;
-        max-width: 800px;
-        background: white;
-        border-radius: 20px;
-        padding: 30px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        max-width: 600px;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 24px;
+        padding: 25px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        display: none; /* 시작 버튼 누르기 전엔 숨김 */
     }
 
     h1 {
         text-align: center;
         margin-bottom: 20px;
-        color: #1d3557;
+        color: #1e293b;
+        font-size: 24px;
     }
 
+    /* 스코어보드 */
     .status {
-        background: #f1f5f9;
-        padding: 15px;
-        border-radius: 12px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        background: #f8fafc;
+        padding: 14px;
+        border-radius: 16px;
         margin-bottom: 20px;
-        line-height: 1.8;
+        border: 1px solid #e2e8f0;
+    }
+
+    .status-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 6px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+
+    .status-label {
+        font-size: 12px;
+        color: #64748b;
+        margin-bottom: 2px;
+    }
+
+    .status-value {
+        font-size: 16px;
+        font-weight: 800;
+        color: #334155;
+    }
+
+    /* AI 이미지 배치 구역 (선택지 화면마다 노출) */
+    .versus-gallery {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .image-box {
+        width: 100%;
+        height: 180px;
+        border-radius: 14px;
+        overflow: hidden;
+        background: #e2e8f0;
+        border: 2px solid white;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        position: relative;
+    }
+
+    .image-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .image-tag {
+        position: absolute;
+        bottom: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0,0,0,0.6);
+        color: white;
+        padding: 2px 10px;
+        border-radius: 20px;
+        font-size: 11px;
         font-weight: bold;
     }
 
     .question {
-        font-size: 22px;
-        margin-bottom: 20px;
-        color: #222;
+        font-size: 19px;
+        font-weight: 700;
+        margin-bottom: 18px;
+        color: #0f172a;
+        text-align: center;
+        line-height: 1.4;
     }
 
+    /* 선택지 버튼 */
     .choices button {
         width: 100%;
         padding: 15px;
-        margin-bottom: 12px;
-        border: none;
-        border-radius: 12px;
-        background: #457b9d;
+        margin-bottom: 10px;
+        border: 1px solid rgba(0,0,0,0.05);
+        border-radius: 14px;
+        background: #3b82f6;
         color: white;
-        font-size: 17px;
+        font-size: 15px;
+        font-weight: 600;
         cursor: pointer;
-        transition: 0.2s;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2);
     }
 
     .choices button:hover {
-        background: #1d3557;
-        transform: scale(1.02);
+        background: #1d4ed8;
+        transform: translateY(-2px);
     }
 
+    /* 중계창 */
     .message {
-        margin-top: 20px;
+        margin-top: 15px;
         padding: 15px;
-        border-radius: 12px;
-        background: #fff8dc;
-        line-height: 1.7;
-        min-height: 100px;
+        border-radius: 16px;
+        background: #fef9c3;
+        border: 1px solid #fef08a;
+        color: #713f12;
+        line-height: 1.5;
+        font-size: 14px;
+        min-height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
     }
 
-    .ending {
-        font-size: 20px;
-        line-height: 1.9;
-        white-space: pre-line;
-    }
-
-    .restart-btn {
-        margin-top: 25px;
-        padding: 15px;
-        width: 100%;
-        border: none;
-        border-radius: 12px;
-        background: crimson;
-        color: white;
-        font-size: 18px;
-        cursor: pointer;
-    }
-
-    .restart-btn:hover {
-        background: darkred;
-    }
-</style>
-</head>
-
-<body>
-
-<div class="game-container">
-
-    <h1>🐻‍❄️ 북극곰 VS 여자친구 ❤️</h1>
-
-    <div class="status" id="status"></div>
-
-    <div class="question" id="question"></div>
-
-    <div class="choices" id="choices"></div>
-
-    <div class="message" id="message">
-        당신의 선택이 지구와 사랑의 운명을 결정합니다...
-    </div>
-
-</div>
-
-<script>
-
-const gameState = {
-    eco_power: 50,
-    gf_love: 50,
-    bear_love: 0,
-    anger_count: 0,
-    current_stage: 0
-};
-
-const questions = [
-
-{
-    question: "질문 1: 더운 집 안, 어떻게 해결할까?",
-    choices: [
-        {
-            text: "❄️ 에어컨 파워 가동",
-            effect: () => {
-                gameState.eco_power -= 15;
-                gameState.gf_love += 20;
-                gameState.bear_love -= 10;
-            },
-            message:
-            "시원한 에어컨 바람에 여자친구가 무릉도원에 온 것 같다며 극찬합니다! 하지만 실외기에서 뿜어져 나온 열기 때문에 북극에 있던 북극곰이 더워합니다."
-        },
-
-        {
-            text: "🌿 자연의 미학 (창문 열기)",
-            effect: () => {
-                gameState.eco_power += 20;
-                gameState.bear_love += 20;
-                gameState.gf_love -= 15;
-                gameState.anger_count += 1;
-            },
-            message:
-            "창문을 열자 북극곰이 북극의 시원함을 만끽합니다! 하지만 여자친구는 땀 범벅이 되어 '여기가 사우나냐?'라며 당신을 잡아먹을 듯 노려봅니다."
-        }
-    ]
-},
-
-{
-    question: "질문 2: 여자친구를 만나러 가는 길, 어떻게 갈까?",
-    choices: [
-        {
-            text: "🚗 분노의 질주 (차 이용)",
-            effect: () => {
-                gameState.eco_power -= 20;
-                gameState.gf_love += 20;
-                gameState.bear_love -= 15;
-            },
-            message:
-            "부릉부릉! 슈퍼카를 끌고 나타난 당신의 모습에 여자친구가 하트를 뿅뿅 날립니다. 하지만 당신이 뿜어낸 매연 때문에 북극곰이 방독면을 쓰기 시작했습니다."
-        },
-
-        {
-            text: "🚶‍♂️ 뚜벅뚜벅 걸어간다",
-            effect: () => {
-                gameState.eco_power += 20;
-                gameState.bear_love += 20;
-                gameState.gf_love -= 20;
-                gameState.anger_count += 1;
-            },
-            message:
-            "뚜벅뚜벅 걸어가며 탄소 배출 제로를 실현하자 북극곰이 윈드밀 댄스를 춥니다! 하지만 1시간을 길바닥에서 기다린 여자친구의 분노 게이지가 폭발 직전입니다."
-        }
-    ]
-},
-
-{
-    question: "질문 3: 여자친구와의 데이트, 뭐가 좋을까?",
-    choices: [
-        {
-            text: "🎬 영화 보기",
-            effect: () => {
-                gameState.eco_power -= 10;
-                gameState.gf_love += 15;
-                gameState.bear_love -= 10;
-            },
-            message:
-            "대형 스크린과 빵빵한 에어컨 속에서 여자친구와 달콤한 영화 데이트 성공! 하지만 영화관의 엄청난 전력 소비로 인해 북극곰의 빙하가 반 토막 났습니다."
-        },
-
-        {
-            text: "🗑️ 플로깅 하기",
-            effect: () => {
-                gameState.eco_power += 25;
-                gameState.bear_love += 25;
-                gameState.gf_love -= 15;
-            },
-            message:
-            "데이트 중에 집게를 들고 쓰레기를 줍는 당신의 숭고한 모습에 북극곰이 첫눈에 반했습니다! 반면 여자친구는 '내가 지금 인간 빗자루냐'라며 허리를 붙잡고 통곡합니다."
-        }
-    ]
-},
-
-{
-    question: "질문 4: 여자친구 생일 선물은?",
-    choices: [
-        {
-            text: "🎁 여자친구가 원하던 선물",
-            effect: () => {
-                gameState.eco_power -= 25;
-                gameState.gf_love += 25;
-                gameState.bear_love -= 20;
-            },
-            message:
-            "상자 안에 상자, 그 안에 또 상자가 있는 마트료시카 급 포장 선물에 여자친구가 감동합니다! 하지만 엄청난 종이 낭비로 인해 북극곰의 집이 완전히 녹아내려 이산가족이 되었습니다."
-        },
-
-        {
-            text: "🌱 친환경 선물",
-            effect: () => {
-                gameState.eco_power += 25;
-                gameState.bear_love += 30;
-                gameState.gf_love -= 25;
-                gameState.anger_count += 2;
-            },
-            message:
-            "친환경 텀블러와 상추 모종을 선물하자 북극곰이 청혼 반지를 만지작거립니다! 여자친구는 멍한 표정으로 선물과 당신을 번갈아 보더니 침묵을 선언했습니다."
-        }
-    ]
-}
-
-];
-
-function updateStatus() {
-
-    document.getElementById("status").innerHTML = `
-        🌍 환경 점수: ${gameState.eco_power}<br>
-        ❤️ 여자친구 호감도: ${gameState.gf_love}<br>
-        🐻‍❄️ 북극곰 호감도: ${gameState.bear_love}<br>
-        👊 등짝 스매싱 횟수: ${gameState.anger_count}
-    `;
-}
-
-function renderQuestion() {
-
-    if(gameState.current_stage >= questions.length){
-        showEnding();
-        return;
-    }
-
-    const q = questions[gameState.current_stage];
-
-    document.getElementById("question").innerText = q.question;
-
-    const choicesDiv = document.getElementById("choices");
-    choicesDiv.innerHTML = "";
-
-    q.choices.forEach(choice => {
-
-        const btn = document.createElement("button");
-
-        btn.innerText = choice.text;
-
-        btn.onclick = () => {
-
-            choice.effect();
-
-            document.getElementById("message").innerText =
-                choice.message;
-
-            gameState.current_stage++;
-
-            updateStatus();
-
-            setTimeout(() => {
-                renderQuestion();
-            }, 2000);
-        };
-
-        choicesDiv.appendChild(btn);
-
-    });
-
-}
-
-function showEnding(){
-
-    document.getElementById("question").innerHTML = "";
-    document.getElementById("choices").innerHTML = "";
-
-    const message = document.getElementById("message");
-
-    if(gameState.eco_power >= 40 || gameState.bear_love >= 60){
-
-        message.innerHTML = `
-        <div class="ending">
-        🐻‍❄️ [HAPPY END] 인간-북극곰 커플 탄생!
-
-        당신의 눈물겨운 환경 사랑에 감동한 북극곰이 턱시도를 입고 당신에게 달려와 기습 프러포즈를 감행했습니다!
-
-        결국 당신은 화가 나서 떠나버린 여자친구를 뒤로한 채,
-        알래스카 빙하 위에서 북극곰과 성대하게 결혼식을 올립니다.
-
-        주례는 펭귄이 서 주었으며,
-        신혼여행은 얼음 동굴로 떠나
-        매일 연어 사냥을 하며 행복하게 살아갑니다.
-
-        야호!
-        </div>
-        `;
-
-    } else {
-
-        message.innerHTML = `
-        <div class="ending">
-        🌪️ [BAD END] 불타는 지구, 그리고 눈물의 장례식
-
-        여자친구의 마음을 얻는 데 성공한 당신!
-
-        마침내 꿈에 그리던 초호화 결혼식을 올리고
-        하와이로 신혼여행을 떠납니다.
-
-        하지만 그동안 당신이 뿜어낸 탄소 때문에
-        거대한 기후재난 급 초특급 태풍이 발생합니다!
-
-        결국 신혼여행 첫날 밤,
-        두 사람은 태풍으로 인한 사고로 영원한 잠에 빠져듭니다.
-
-        며칠 뒤,
-        당신과 여자친구의 장례식장에
-        검은 상복을 입은 북극곰이 찾아와
-        사랑의 언어를 속삭이며 울부짖습니다...
-        </div>
-        `;
-    }
-
-    const restartBtn = document.createElement("button");
-    restartBtn.className = "restart-btn";
-    restartBtn.innerText = "🔄 다시 하기";
-
-    restartBtn.onclick = () => {
-        location.reload();
-    };
-
-    document.getElementById("choices").appendChild(restartBtn);
-
-}
-
-updateStatus();
-renderQuestion();
-
-</script>
-
-</body>
-</html>
+    /* 엔딩 이미지 스타일 */
+    .ending-img-box {
+        width: 100
